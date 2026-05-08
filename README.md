@@ -23,3 +23,6 @@ A lightweight, privacy-focused **Retrieval-Augmented Generation (RAG)** pipeline
 ├── main.py             # Main RAG logic
 ├── requirements.txt    # Project dependencies
 └── .env.example        # Environment variable template
+
+
+<img width="1487" height="358" alt="rag demo_png" src="https://github.com/user-attachments/assets/b9ab58cf-6d17-4e66-83be-f1ac68633042" />
