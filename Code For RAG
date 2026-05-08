@@ -1,0 +1,53 @@
+from langchain_openai import ChatOpenAI
+from langchain_community.document_loaders import TextLoader
+from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
+
+# Load document
+loader = TextLoader("RAG/docs/info.txt")
+documents = loader.load()
+
+# Local embeddings model (FREE)
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
+)
+
+# Create vector database
+vectorstore = FAISS.from_documents(
+    documents,
+    embeddings
+)
+
+# Create retriever
+retriever = vectorstore.as_retriever()
+
+# OpenAI model
+llm = ChatOpenAI(
+    api_key="YOUR_OPENAI_API_KEY",
+    model="gpt-4o-mini"
+)
+
+# Question
+query = "Tell me about the Eiffel Tower"
+
+# Retrieve documents
+docs = retriever.invoke(query)
+
+# Combine context
+context = "\n".join([doc.page_content for doc in docs])
+
+# Prompt
+prompt = f"""
+Answer using the context below.
+
+Context:
+{context}
+
+Question:
+{query}
+"""
+
+# Generate answer
+response = llm.invoke(prompt)
+
+print(response.content)
